@@ -20,9 +20,9 @@ export const orthographyCheckUseCase = async (
 
             Example of output/answer:
             {
-              userScore: number,
-              errors: string[], // ["error => solution"],
-              message: string // Use emojis and text to give feedback to user
+              userScore: percentage, // Give a score to the user text spell
+              errors: string[], // ["error -> solution"],
+              message: string // Use emojis and text to give feedback to user, and always answer with a correction if there were mistakes
             }
           `,
       },
@@ -31,7 +31,5 @@ export const orthographyCheckUseCase = async (
     model: 'gpt-3.5-turbo',
   });
 
-  console.log(completion);
-
-  return completion.choices[0];
+  return JSON.parse(completion.choices[0].message.content);
 };
