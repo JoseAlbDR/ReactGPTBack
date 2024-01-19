@@ -5,7 +5,7 @@ interface Options {
   lang: string;
 }
 
-export const TranslateUseCase = async (
+export const translateUseCase = async (
   openai: OpenAI,
   { prompt, lang }: Options,
 ) => {
@@ -32,5 +32,5 @@ export const TranslateUseCase = async (
     model: 'gpt-3.5-turbo',
   });
 
-  return JSON.parse(completion.choices[0].message.content);
+  return completion.choices[0].message.content;
 };
