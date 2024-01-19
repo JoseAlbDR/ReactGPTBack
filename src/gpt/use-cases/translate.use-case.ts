@@ -9,12 +9,12 @@ export const translateUseCase = async (
   openai: OpenAI,
   { prompt, lang }: Options,
 ) => {
-  const completion = await openai.chat.completions.create({
+  return await openai.chat.completions.create({
     messages: [
       {
         role: 'system',
         content: `
-          You will be provided with text in any language and you have to translate to ${lang} language.
+          Translate the following text to language ${lang}: ${prompt}.
 
           Example of a correct translation to english:
           Hola me llamo Alberto => Hello my name is Alberto
@@ -24,13 +24,8 @@ export const translateUseCase = async (
 
         `,
       },
-      {
-        role: 'user',
-        content: prompt,
-      },
     ],
+    stream: true,
     model: 'gpt-3.5-turbo',
   });
-
-  return completion.choices[0].message.content;
 };
