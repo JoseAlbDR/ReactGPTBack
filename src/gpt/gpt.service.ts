@@ -9,6 +9,7 @@ import {
 import { OrthographyDto, ProsConsDiscusserDto, TextToAudioDto } from './dtos';
 import OpenAI from 'openai';
 import { TranslateDto } from './dtos/translate.dto';
+import { textToAudioUseCaseGetter } from './use-cases/text-to-audio-getter.use-case';
 
 @Injectable()
 export class GptService {
@@ -40,5 +41,9 @@ export class GptService {
 
   async textToAudio(textToAudioDto: TextToAudioDto) {
     return await textToAudioUseCase(this.openai, textToAudioDto);
+  }
+
+  textToAudioGetter(id: string) {
+    return textToAudioUseCaseGetter(id);
   }
 }

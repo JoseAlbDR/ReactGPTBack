@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { GptService } from './gpt.service';
 import {
   OrthographyDto,
@@ -65,5 +73,18 @@ export class GptController {
     res.status(HttpStatus.OK);
 
     res.sendFile(speechFile);
+  }
+
+  @Get('text-to-audio/:id')
+  textToAudioGetter(@Param() { id }, @Res() res: Response) {
+    console.log({ id });
+
+    const audioFile = this.gptService.textToAudioGetter(id);
+
+    if (!audioFile)
+      return res.status(404).json({ message: 'Audio file not found' });
+
+    res.setHeader('Content-Type', 'audio/mp3');
+    res.status(HttpStatus.OK).sendFile(audioFile);
   }
 }
