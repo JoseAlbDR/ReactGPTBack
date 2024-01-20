@@ -7,7 +7,7 @@ export const textToAudioUseCaseGetter = (id: string) => {
   const filePath = path.resolve(folderPath, `${id}.mp3`);
 
   if (!fs.existsSync(filePath)) {
-    new NotFoundException(`File ${filePath} does not exist`);
+    throw new NotFoundException(`File ${id}.mp3 does not exist`);
   }
 
   return filePath;
