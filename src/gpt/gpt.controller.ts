@@ -1,6 +1,11 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { OrthographyDto, ProsConsDiscusserDto, TranslateDto } from './dtos';
+import {
+  OrthographyDto,
+  ProsConsDiscusserDto,
+  TextToAudioDto,
+  TranslateDto,
+} from './dtos';
 import { Response } from 'express';
 import { ChatCompletionChunk } from 'openai/resources';
 import { Stream } from 'openai/streaming';
@@ -47,5 +52,18 @@ export class GptController {
     const stream = await this.gptService.translate(translateDto);
 
     this.getStream(res, stream);
+  }
+
+  @Post('text-to-audio')
+  async textToAudio(
+    @Body() textToAudioDto: TextToAudioDto,
+    @Res() res: Response,
+  ) {
+    const { speechFile } = await this.gptService.textToAudio(textToAudioDto);
+
+    res.setHeader('Content-Type', 'audio/mp3');
+    res.status(HttpStatus.OK);
+
+    res.sendFile(speechFile);
   }
 }
