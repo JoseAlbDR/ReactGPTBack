@@ -76,15 +76,11 @@ export class GptController {
   }
 
   @Get('text-to-audio/:id')
-  textToAudioGetter(@Param() { id }, @Res() res: Response) {
-    console.log({ id });
-
+  textToAudioGetter(@Param('id') id: string, @Res() res: Response) {
     const audioFile = this.gptService.textToAudioGetter(id);
 
-    if (!audioFile)
-      return res.status(404).json({ message: 'Audio file not found' });
-
     res.setHeader('Content-Type', 'audio/mp3');
-    res.status(HttpStatus.OK).sendFile(audioFile);
+    res.status(HttpStatus.OK);
+    res.sendFile(audioFile);
   }
 }
