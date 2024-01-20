@@ -3,11 +3,11 @@ import {
   orthographyCheckUseCase,
   prosConsDiscusserStreamUseCase,
   prosConsDiscusserUseCase,
+  translateUseCase,
 } from './use-cases';
 import { OrthographyDto, ProsConsDiscusserDto } from './dtos';
 import OpenAI from 'openai';
 import { TranslateDto } from './dtos/translate.dto';
-import { translateUseCase } from './use-cases/translate.use-case';
 
 @Injectable()
 export class GptService {

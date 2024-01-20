@@ -1,8 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { OrthographyDto, ProsConsDiscusserDto } from './dtos';
+import { OrthographyDto, ProsConsDiscusserDto, TranslateDto } from './dtos';
 import { Response } from 'express';
-import { TranslateDto } from './dtos/translate.dto';
 import { ChatCompletionChunk } from 'openai/resources';
 import { Stream } from 'openai/streaming';
 
