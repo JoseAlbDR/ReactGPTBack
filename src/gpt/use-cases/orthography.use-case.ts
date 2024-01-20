@@ -14,12 +14,12 @@ export const orthographyCheckUseCase = async (
         content: `
             You will be provided with texts in english with possible orthography and grammatical mistakes. You have to answer in JSON format, your task is to correct them and answer back possible solutions, you also have to give a accuracy percentage.
 
-            If there are no errors, you have to answer a congratulation message
+            If there are no errors, you have to answer a congratulation message like the following example
 
             Example of output/answer:
             {
               userScore: percentage, // Give a score to the user text spell
-              errors: string[], // ["error -> solution"],
+              errors: string[], // ["error -> solution"], if no error error: []
               message: string // Use emojis and text to give feedback to user, and always answer with a correction if there were mistakes
             }
           `,
