@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Res,
+  UseInterceptors,
 } from '@nestjs/common';
+import { diskStorage } from 'multer';
 import { GptService } from './gpt.service';
 import {
   OrthographyDto,
@@ -17,6 +19,8 @@ import {
 import { Response } from 'express';
 import { ChatCompletionChunk } from 'openai/resources';
 import { Stream } from 'openai/streaming';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Uuid } from './adapters';
 
 @Controller('gpt')
 export class GptController {
@@ -82,5 +86,22 @@ export class GptController {
     res.setHeader('Content-Type', 'audio/mp3');
     res.status(HttpStatus.OK);
     res.sendFile(audioFile);
+  }
+
+  @Post('audio-to-text')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './generated/uploads/',
+        filename: (req, file, cb) => {
+          const fileExtension = file.originalname.split('.').pop();
+          const fileName = `${Uuid.v4()}.${fileExtension}`;
+          return cb(null, fileName);
+        },
+      }),
+    }),
+  )
+  audioToText() {
+    return 'done';
   }
 }
