@@ -26,6 +26,7 @@ import { Stream } from 'openai/streaming';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Uuid } from './adapters';
 import { AudioToTextDto } from './dtos/audio-to-text.dto';
+import { ImageGeneratorDto } from './dtos/image-generator.dto';
 
 @Controller('gpt')
 export class GptController {
@@ -124,5 +125,10 @@ export class GptController {
     @Body() audioToTextDto: AudioToTextDto,
   ) {
     return this.gptService.audioToText(file, audioToTextDto);
+  }
+
+  @Post('image-generator')
+  async imageGenerator(@Body() imageGeneratorDto: ImageGeneratorDto) {
+    return this.gptService.imageGenerator(imageGeneratorDto);
   }
 }
