@@ -87,7 +87,7 @@ export class GptController {
 
   @Get('text-to-audio/:id')
   textToAudioGetter(@Param('id') id: string, @Res() res: Response) {
-    const audioFile = this.gptService.textToAudioGetter(id);
+    const audioFile = this.gptService.getAudio(id);
 
     res.setHeader('Content-Type', 'audio/mp3');
     res.status(HttpStatus.OK);
@@ -130,5 +130,17 @@ export class GptController {
   @Post('image-generator')
   async imageGenerator(@Body() imageGeneratorDto: ImageGeneratorDto) {
     return this.gptService.imageGenerator(imageGeneratorDto);
+  }
+
+  @Get('image-generator/:imageName')
+  async imageGeneratorGetter(
+    @Param('imageName') imageName: string,
+    @Res() res: Response,
+  ) {
+    const imageFile = this.gptService.getImage(imageName);
+
+    res.setHeader('Content-Type', 'image/png');
+    res.status(HttpStatus.OK);
+    res.sendFile(imageFile);
   }
 }

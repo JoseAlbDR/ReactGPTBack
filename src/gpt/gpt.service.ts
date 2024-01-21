@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
+
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   orthographyCheckUseCase,
   prosConsDiscusserStreamUseCase,
@@ -17,7 +20,6 @@ import {
 } from './dtos';
 import OpenAI from 'openai';
 import { TranslateDto } from './dtos/translate.dto';
-import { textToAudioUseCaseGetter } from './use-cases/text-to-audio-getter.use-case';
 
 @Injectable()
 export class GptService {
@@ -51,8 +53,15 @@ export class GptService {
     return await textToAudioUseCase(this.openai, textToAudioDto);
   }
 
-  textToAudioGetter(id: string) {
-    return textToAudioUseCaseGetter(id);
+  getAudio(id: string) {
+    const folderPath = path.resolve(__dirname, '../../../generated/audios');
+    const filePath = path.resolve(folderPath, `${id}.mp3`);
+
+    if (!fs.existsSync(filePath)) {
+      throw new NotFoundException(`File ${id}.mp3 does not exist`);
+    }
+
+    return filePath;
   }
 
   async audioToText(file: Express.Multer.File, { prompt }: AudioToTextDto) {
@@ -61,5 +70,16 @@ export class GptService {
 
   async imageGenerator(imageGeneratorDto: ImageGeneratorDto) {
     return await imageGeneratorUseCase(this.openai, imageGeneratorDto);
+  }
+
+  getImage(imageName: string) {
+    const folderPath = path.resolve(__dirname, '../../generated/images');
+    const imagePath = path.resolve(folderPath, `${imageName}.png`);
+
+    if (!fs.existsSync(imagePath)) {
+      throw new NotFoundException(`File ${imageName}.png does not exist`);
+    }
+
+    return imagePath;
   }
 }
