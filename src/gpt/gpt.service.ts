@@ -54,8 +54,7 @@ export class GptService {
   }
 
   getAudio(id: string) {
-    const folderPath = path.resolve(__dirname, '../../../generated/audios');
-    const filePath = path.resolve(folderPath, `${id}.mp3`);
+    const filePath = path.resolve('./', './generated/audios', `${id}.mp3`);
 
     if (!fs.existsSync(filePath)) {
       throw new NotFoundException(`File ${id}.mp3 does not exist`);
@@ -73,8 +72,7 @@ export class GptService {
   }
 
   getImage(imageName: string) {
-    const folderPath = path.resolve(__dirname, '../../generated/images');
-    const imagePath = path.resolve(folderPath, `${imageName}.png`);
+    const imagePath = path.resolve('./', './generated/images', imageName);
 
     if (!fs.existsSync(imagePath)) {
       throw new NotFoundException(`File ${imageName}.png does not exist`);
