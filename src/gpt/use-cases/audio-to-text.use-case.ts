@@ -10,16 +10,14 @@ export const audioToTextUseCase = async (
   openai: OpenAI,
   { prompt, file }: Options,
 ) => {
-  console.log({ prompt, file });
-
-  const response = await openai.audio.translations.create({
+  const response = await openai.audio.transcriptions.create({
     model: 'whisper-1',
     file: fs.createReadStream(file.path),
     prompt, // Same as audio language
-    response_format: 'vtt',
+    // response_format: 'vtt',
+    // response_format: 'srt',
+    response_format: 'verbose_json',
   });
-
-  console.log({ response });
 
   return response;
 };
