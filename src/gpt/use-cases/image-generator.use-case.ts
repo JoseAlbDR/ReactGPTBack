@@ -21,11 +21,11 @@ export const imageGeneratorUseCase = async (
     size: '1024x1024',
   });
 
-  await downloadImageAsPng(response.data[0].url);
+  const url = await downloadImageAsPng(response.data[0].url);
 
   return {
-    url: response.data[0].url,
-    localPath: '',
+    url,
+    openAIUrl: response.data[0].url,
     revised_prompt: response.data[0].revised_prompt,
   };
 };
