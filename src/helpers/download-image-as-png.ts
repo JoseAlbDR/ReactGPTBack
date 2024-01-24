@@ -28,7 +28,10 @@ export const downloadImageAsPng = async (
   return fullPath ? completePath : imageNamePng;
 };
 
-export const downloadBase64ImageAsPng = async (base64Image: string) => {
+export const downloadBase64ImageAsPng = async (
+  base64Image: string,
+  fullPath: boolean = false,
+) => {
   base64Image = base64Image.split(';base64,').pop();
   const imageBuffer = Buffer.from(base64Image, 'base64');
 
@@ -41,5 +44,5 @@ export const downloadBase64ImageAsPng = async (base64Image: string) => {
 
   await sharp(imageBuffer).png().ensureAlpha().toFile(completePath);
 
-  return imageNamePng;
+  return fullPath ? completePath : imageNamePng;
 };

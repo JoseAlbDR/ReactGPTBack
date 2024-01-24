@@ -23,12 +23,11 @@ export const imageVariationUseCase = async (
   });
 
   const imageName = await downloadImageAsPng(response.data[0].url);
-
   const url = `${process.env.SERVER_URL}/gpt/image-generator/${imageName}`;
 
   return {
     url,
-    original_url: response.data[0].url,
-    prompt: response.data[0].revised_prompt,
+    openAIUrl: response.data[0].url,
+    revised_prompt: response.data[0].revised_prompt,
   };
 };
