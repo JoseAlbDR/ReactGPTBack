@@ -1,6 +1,5 @@
 import OpenAI from 'openai';
 import * as fs from 'fs';
-import * as path from 'path';
 import { downloadBase64ImageAsPng, downloadImageAsPng } from 'src/helpers';
 
 interface Options {
@@ -13,6 +12,7 @@ export const imageGeneratorUseCase = async (
   openai: OpenAI,
   { prompt, originalImage, maskImage }: Options,
 ) => {
+  // Generate image
   if (!originalImage || !maskImage) {
     const response = await openai.images.generate({
       model: 'dall-e-3',
@@ -24,15 +24,17 @@ export const imageGeneratorUseCase = async (
       size: '1024x1024',
     });
 
-    const url = await downloadImageAsPng(response.data[0].url);
+    const fileName = await downloadImageAsPng(response.data[0].url);
+    const url = `${process.env.SERVER_URL}/gpt/image-generator/${fileName}`;
 
     return {
-      url, // TODO: http://localhost:3000/...
+      url,
       openAIUrl: response.data[0].url,
       revised_prompt: response.data[0].revised_prompt,
     };
   }
 
+  // Edit image
   const pngImagePath = await downloadImageAsPng(originalImage);
   const maskPath = await downloadBase64ImageAsPng(maskImage);
 
@@ -46,12 +48,11 @@ export const imageGeneratorUseCase = async (
     response_format: 'url',
   });
 
-  const localImagePath = await downloadImageAsPng(response.data[0].url);
-  const fileName = path.basename(localImagePath);
-  const publicUrl = `localhost:3000/${fileName}`;
+  const fileName = await downloadImageAsPng(response.data[0].url);
+  const url = `${process.env.SERVER_URL}/gpt/image-generator/${fileName}`;
 
   return {
-    url: publicUrl, // TODO: http://localhost:3000/...
+    url,
     openAIUrl: response.data[0].url,
     revised_prompt: response.data[0].revised_prompt,
   };

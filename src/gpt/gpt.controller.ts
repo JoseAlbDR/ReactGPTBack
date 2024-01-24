@@ -15,6 +15,7 @@ import {
 import { diskStorage } from 'multer';
 import { GptService } from './gpt.service';
 import {
+  ImageVariationDto,
   OrthographyDto,
   ProsConsDiscusserDto,
   TextToAudioDto,
@@ -142,5 +143,10 @@ export class GptController {
     res.setHeader('Content-Type', 'image/png');
     res.status(HttpStatus.OK);
     res.sendFile(imageFile);
+  }
+
+  @Post('image-variation')
+  async imageVariation(@Body() imageVariationDto: ImageVariationDto) {
+    return this.gptService.generateImageVariation(imageVariationDto);
   }
 }

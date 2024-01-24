@@ -4,7 +4,10 @@ import * as fs from 'fs';
 import * as sharp from 'sharp';
 import { Uuid } from 'src/gpt/adapters';
 
-export const downloadImageAsPng = async (url: string) => {
+export const downloadImageAsPng = async (
+  url: string,
+  fullPath: boolean = false,
+) => {
   const response = await fetch(url);
 
   if (!response.ok)
@@ -22,7 +25,7 @@ export const downloadImageAsPng = async (url: string) => {
 
   await sharp(buffer).png().ensureAlpha().toFile(completePath);
 
-  return completePath;
+  return fullPath ? completePath : imageNamePng;
 };
 
 export const downloadBase64ImageAsPng = async (base64Image: string) => {
@@ -38,5 +41,5 @@ export const downloadBase64ImageAsPng = async (base64Image: string) => {
 
   await sharp(imageBuffer).png().ensureAlpha().toFile(completePath);
 
-  return path.join(folderPath, imageNamePng);
+  return imageNamePng;
 };
