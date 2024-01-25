@@ -4,6 +4,7 @@ import {
   checkCompleteStatusUseCase,
   createRunUseCase,
   createThreadUseCase,
+  getMessageListUseCase,
 } from './use-cases';
 import { UserQuestionDto } from './dtos/user-question.dto';
 import { createMessageUseCase } from './use-cases/create-message.use-case';
@@ -19,7 +20,7 @@ export class C3PoAssistantService {
   }
 
   async userQuestion(userQuestionDto: UserQuestionDto) {
-    const message = await createMessageUseCase(this.openai, userQuestionDto);
+    await createMessageUseCase(this.openai, userQuestionDto);
 
     const run = await createRunUseCase(this.openai, {
       threadId: userQuestionDto.threadId,
@@ -29,5 +30,11 @@ export class C3PoAssistantService {
       runId: run.id,
       threadId: userQuestionDto.threadId,
     });
+
+    const messages = await getMessageListUseCase(this.openai, {
+      threadId: userQuestionDto.threadId,
+    });
+
+    return messages.reverse();
   }
 }
