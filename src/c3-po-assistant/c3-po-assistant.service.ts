@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
-import { createRunUseCase, createThreadUseCase } from './use-cases';
+import {
+  checkCompleteStatusUseCase,
+  createRunUseCase,
+  createThreadUseCase,
+} from './use-cases';
 import { UserQuestionDto } from './dtos/user-question.dto';
 import { createMessageUseCase } from './use-cases/create-message.use-case';
 
@@ -21,6 +25,9 @@ export class C3PoAssistantService {
       threadId: userQuestionDto.threadId,
     });
 
-    return message;
+    await checkCompleteStatusUseCase(this.openai, {
+      runId: run.id,
+      threadId: userQuestionDto.threadId,
+    });
   }
 }
