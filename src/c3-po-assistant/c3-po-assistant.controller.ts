@@ -13,6 +13,6 @@ export class C3PoAssistantController {
 
   @Post('user-question')
   async userQuestion(@Body() userQuestionDto: UserQuestionDto) {
-    return { userQuestionDto };
+    return await this.c3PoAssistantService.userQuestion(userQuestionDto);
   }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
-import { createThread } from './use-cases';
+import { createRunUseCase, createThreadUseCase } from './use-cases';
+import { UserQuestionDto } from './dtos/user-question.dto';
+import { createMessageUseCase } from './use-cases/create-message.use-case';
 
 @Injectable()
 export class C3PoAssistantService {
@@ -9,6 +11,16 @@ export class C3PoAssistantService {
   });
 
   async createThread() {
-    return await createThread(this.openai);
+    return await createThreadUseCase(this.openai);
+  }
+
+  async userQuestion(userQuestionDto: UserQuestionDto) {
+    const message = await createMessageUseCase(this.openai, userQuestionDto);
+
+    const run = await createRunUseCase(this.openai, {
+      threadId: userQuestionDto.threadId,
+    });
+
+    return message;
   }
 }
